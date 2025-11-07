@@ -9,7 +9,7 @@ class Todo(models.Model):
         IN_PROGRESS = 'IN_PROGRESS',  _('In Bearbeitung')
         COMPLETED = 'COMPLETED',  _('Fertig')
         
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
     created_at = models.DateTimeField(auto_now_add=True)

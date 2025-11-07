@@ -65,7 +65,7 @@
   }
 
   button {
-    @apply bg-linear-to-bl
+    @apply bg-linear-to-bl block w-full
      from-pink to-light-blue
       hover:from-light-blue hover:to-pink 
        outline
