@@ -1,4 +1,4 @@
-export type Status = 'offen' | 'in Bearbeitung' | 'erledigt';
+export type Status = 'Offen' | 'In Bearbeitung' | 'Fertig';
 
 export interface Todo {
   id: string;
@@ -6,4 +6,5 @@ export interface Todo {
   status: Status;
   description?: string;
   created_at: string;
+  updated_at: string;
 }
