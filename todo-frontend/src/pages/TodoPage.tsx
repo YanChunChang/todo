@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import type { Todo } from '../models/types';
+import { createTodo } from '../services/todoService';
 
 
 export default function TodoPage() {
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    function handleCreate(todoData: Omit<Todo, 'id' | 'created_at'>) {
-        const newTodo: Todo = {
-            id: crypto.randomUUID(),
-            created_at: new Date().toISOString(),
-            ...todoData,
-        };
-        setTodos((prevTodos) => [newTodo, ...prevTodos]);
-    }
+    async function handleCreate(todoData: Omit<Todo, 'id' | 'created_at' | 'updated_at'>) {
+        const newTodo = await createTodo(todoData);
+        setTodos(prev => [newTodo, ...prev]);
+      }
 
     return (
         <div className="container mx-auto bg-gray-100 p-10 mt-10 rounded-2xl " >
@@ -40,6 +37,12 @@ export default function TodoPage() {
                                  Beschreibung:<br />
                                  {todo.description}
                                </p>
+                               <p>
+                                 Status: {todo.status}
+                               </p>
+                               <p>
+                                 Datum: {todo.created_at}
+                               </p>
                              </div>
                             ))}
                         </div>
@@ -50,7 +53,7 @@ export default function TodoPage() {
                 </aside>
 
                 {/* Aufgaben erstellen */}
-                <main className="rounded-2xl shadow-lg bg-white p-6 shadow">
+                <main className="rounded-2xl shadow-lg bg-white p-6">
                     <TodoForm onCreate={handleCreate} />
                 </main>
             </div>
