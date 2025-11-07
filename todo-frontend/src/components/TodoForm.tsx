@@ -3,7 +3,7 @@ import { useState } from 'react';
  
 
 interface Props {
-    onCreate?: (todoData: Omit<Todo, 'id' | 'created_at'>) => void;
+    onCreate?: (todoData: Omit<Todo, 'id'| 'status_display' | 'created_at'| 'updated_at'>) => Promise<void>| void;
 }
 
 export default function TodoForm({ onCreate }: Props) {
@@ -21,12 +21,11 @@ export default function TodoForm({ onCreate }: Props) {
         onCreate?.({
             title: t,
             description: description.trim() || undefined,
-            status: 'offen',
+            status: 'OPEN',
         });
 
         setTitle('');
         setDescription('');
-        alert('Aufgabe gespeichert!');
     }
 
 
