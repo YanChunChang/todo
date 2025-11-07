@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import type { Todo } from '../models/types';
 import { createTodo } from '../services/todoService';
+import TodoItem from '../components/TodoItem';
 
 
 export default function TodoPage() {
@@ -29,29 +30,7 @@ export default function TodoPage() {
 
           {/* für leere Liste */}
           <div className="mt-2 md:flex-1 md:overflow-auto custom-scrollbar">
-            <div className="grid gap-2 px-2 py-2">
-              {todos.map((todo, index) => (
-                <div
-                  key={todo.id}
-                  className={`todo-item ${index % 2 === 0
-                    ? "bg-linear-to-br from-light-blue to-marine"
-                    : "bg-linear-to-br from-light-rosa to-purple"
-                    }`}
-                >
-                  <h3>Titel: {todo.title}</h3>
-                  <p>
-                    Beschreibung:<br />
-                    {todo.description}
-                  </p>
-                  <p>
-                    Status: {todo.status_display}
-                  </p>
-                  <p>
-                    Datum: {todo.created_at}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <TodoItem todos={todos} />
             {todos.length === 0 && (
               <div className="text-lg text-gray-500">Noch nichts eingetragen.</div>
             )}
