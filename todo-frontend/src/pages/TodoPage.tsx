@@ -7,7 +7,7 @@ import { createTodo } from '../services/todoService';
 export default function TodoPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  async function handleCreate(todoData: Omit<Todo, 'id'| 'status_display' | 'created_at' | 'updated_at'>) {
+  async function handleCreate(todoData: Omit<Todo, 'id' | 'status_display' | 'created_at' | 'updated_at'>) {
     let newTodo: Todo;
     try {
       newTodo = await createTodo(todoData);
@@ -34,8 +34,8 @@ export default function TodoPage() {
                 <div
                   key={todo.id}
                   className={`todo-item ${index % 2 === 0
-                      ? "bg-linear-to-br from-light-blue to-marine"
-                      : "bg-linear-to-br from-light-rosa to-purple"
+                    ? "bg-linear-to-br from-light-blue to-marine"
+                    : "bg-linear-to-br from-light-rosa to-purple"
                     }`}
                 >
                   <h3>Titel: {todo.title}</h3>
