@@ -7,9 +7,7 @@ export async function listTodos(): Promise<Todo[]> {
     const res = await fetch(`${API_URL}/todos/`);
     console.log('Fetch todos response:', res);
 
-    if (!res.ok) {
-        throw new Error(`Fehler beim Laden: ${res.status}`);
-    }
+    await errorHandler(res);
 
     const data = await res.json();
     console.log('Fetched todos data:', data);
@@ -26,32 +24,7 @@ export async function createTodo(todoData: Omit<Todo, 'id' | 'status_display' | 
         body: JSON.stringify(todoData),
     });
 
-    if (!res.ok) {
-        let error = '';
-        let errorMessage = '';
-        try {
-            error = await res.json();                   //javascript object
-
-            if (error && typeof error === 'object') {
-                const field = Object.keys(error)[0];    //title
-                const value = error[field];             // error message in Title
-                errorMessage = value;
-
-                // Wenn es ein Array ist, nimm den ersten Text
-                // if (Array.isArray(value)) {
-                //     errorMessage = value[0];
-                // } else if (typeof value === 'string') {
-                //     errorMessage = value;
-                // }
-            }
-
-        }
-        catch (err) {
-            console.error('Fehler beim Lesen der Fehlermeldung:', err);
-            errorMessage = 'Unbekannter Fehler';
-        }
-        throw new Error(`${errorMessage}`);
-    }
+    await errorHandler(res);
 
     const data = await res.json();
     return data as Todo;
@@ -59,39 +32,36 @@ export async function createTodo(todoData: Omit<Todo, 'id' | 'status_display' | 
 
 export async function updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
     const res = await fetch(`${API_URL}/todos/${id}/`, {
-      method: "PATCH",                              // Teill-Update
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+        method: "PATCH",                              // Teill-Update
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
     });
-  
-    if (!res.ok) {
-      let error = await res.json();
-      let errorMessage = '';
-      if (error && typeof error === 'object') {
-        const field = Object.keys(error)[0];    //title
-        const value = error[field];             // error message in Title
-        errorMessage = value;
 
-        // Wenn es ein Array ist, nimm den ersten Text
-        // if (Array.isArray(value)) {
-        //     errorMessage = value[0];
-        // } else if (typeof value === 'string') {
-        //     errorMessage = value;
-        // }
-    }
+    await errorHandler(res);
 
-      throw new Error(`Fehler beim Aktualisieren: ${res.status}${errorMessage}`);
-    }
-  
     const updated = await res.json();
     return updated as Todo;
-  }
+}
 
-  export async function deleteTodo(id: number): Promise<void> {
+export async function deleteTodo(id: number): Promise<void> {
     const res = await fetch(`${API_URL}/todos/${id}/`, { method: "DELETE" });
-    if (!res.ok && res.status !== 204) {
-      throw new Error(`Fehler beim Löschen: ${res.status}`);
-    }
-  }
-  
+    await errorHandler(res);
+}
+
+ async function errorHandler(res: Response) {
+    if (!res.ok) {
+        let errorMessage = '';
+        try {
+          const error = await res.json(); 
+          const field = Object.keys(error)[0];
+          const value = error[field];
+          errorMessage = value;
+        } catch (err) {
+          console.error('Fehler beim Lesen der Fehlermeldung:', err);
+          errorMessage = 'Unbekannter Fehler';
+        }
+        throw new Error(errorMessage);
+      }
+}
+
 
