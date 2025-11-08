@@ -7,7 +7,7 @@ class Todo(models.Model):
     class Status(models.TextChoices):
         OPEN = 'OPEN', _('Offen')
         IN_PROGRESS = 'IN_PROGRESS',  _('In Bearbeitung')
-        COMPLETED = 'COMPLETED',  _('Fertig')
+        COMPLETED = 'COMPLETED',  _('Erledigt')
         
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)

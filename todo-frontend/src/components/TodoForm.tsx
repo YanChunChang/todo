@@ -37,7 +37,7 @@ export default function TodoForm({ onCreate }: Props) {
                     Titel*
                 </label>
                 <input
-                    className="animate-glow"
+                    className="animate-glow focus:outline-marine"
                     type="text"
                     id="title"
                     name="title"
@@ -54,7 +54,7 @@ export default function TodoForm({ onCreate }: Props) {
                     Beschreibung
                 </label>
                 <textarea
-                    className="animate-glow"
+                    className="animate-glow focus:outline-marine"
                     id="description"
                     name="description"
                     rows={4}
@@ -68,7 +68,7 @@ export default function TodoForm({ onCreate }: Props) {
             <div className='flex flex-col gap-4 justify-center md:flex-row'>
                 <button
                     type="submit"
-                    className="self-center animate-glow"
+                    className="self-center animate-glow button button-neon"
                 >
                     Speichern
                 </button>
@@ -77,8 +77,8 @@ export default function TodoForm({ onCreate }: Props) {
                     onClick={() => {
                         setTitle('');
                         setDescription('');
-                    }}
-                    className="self-center animate-glow"
+                    }} 
+                    className="self-center animate-glow button button-neon"
                 >
                     Zurücksetzen
                 </button>
