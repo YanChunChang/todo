@@ -5,13 +5,10 @@ const API_URL = env.VITE_API_BASE_URL
 
 export async function listTodos(): Promise<Todo[]> {
     const res = await fetch(`${API_URL}/todos/`);
-    console.log('Fetch todos response:', res);
-
+    
     await errorHandler(res);
 
     const data = await res.json();
-    console.log('Fetched todos data:', data);
-
     return data as Todo[];
 }
 

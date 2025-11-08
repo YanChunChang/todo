@@ -12,9 +12,13 @@ export default function TodoPage() {
 
   // Liste laden
   async function refresh() {
-    try { setLoading(true); setError(null);
+    try { 
+      setLoading(true); 
+      setError(null);
       const data = await listTodos(); setTodos(data);
-    } catch (e:any) { setError(e.message ?? "Fehler beim Laden"); }
+    } catch (e:any) {
+       setError(e.message ?? "Fehler beim Laden");
+      }
     finally { setLoading(false); }
   }
 
@@ -32,7 +36,11 @@ export default function TodoPage() {
 
   async function handleUpdate(id: number, data: Partial<Todo>) {
     await updateTodo(id, data);
-    setTodos(prev => prev.map(t => t.id === id ? { ...t, ...data, updated_at: new Date().toISOString() } : t));
+    setTodos(prev => prev.map(t => t.id === id ? 
+      { ...t, 
+        ...data, 
+        updated_at: new Date().toISOString() } : t));
+    await refresh();
   };
   
   const handleDelete = async (id: number) => {
