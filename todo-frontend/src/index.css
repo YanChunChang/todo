@@ -64,18 +64,6 @@
     @apply font-medium text-purple;
   }
 
-  button {
-    @apply bg-linear-to-bl block w-full
-     from-pink to-light-blue
-      hover:from-light-blue hover:to-pink 
-       outline
-       focus:outline-marine
-       px-4 py-2 rounded-lg text-white 
-       font-semibold 
-       transition duration-500 
-       transform hover:scale-105;
-  }
-
   input,
   textarea {
     @apply px-3 py-2 rounded-lg  border-none
@@ -93,6 +81,29 @@
     shadow-md hover:shadow-[0_0_20px_4px_rgba(94,231,223,0.3)]
     transition duration-300 ease-in-out
     hover:scale-[1.02];
+  }
+
+  .button {
+    @apply        
+    px-4 py-2 rounded-lg text-white 
+    font-semibold 
+    transition duration-500 
+    transform hover:scale-105;
+  }
+  .button-neon{
+    @apply     
+    bg-linear-to-bl block w-full
+     from-pink to-light-blue
+     hover:from-light-blue hover:to-pink 
+     outline
+     focus:outline-marine;
+  }
+
+  .button-in-todo-item {
+    @apply        
+    bg-transparent
+    border-2 border-white
+    w-full
   }
 }
 
