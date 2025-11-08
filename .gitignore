@@ -35,3 +35,6 @@ db.sqlite3
 
 # VSCode
 .vscode/
+
+# Virtual env
+.venv/
