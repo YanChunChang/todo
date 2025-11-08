@@ -56,3 +56,42 @@ export async function createTodo(todoData: Omit<Todo, 'id' | 'status_display' | 
     const data = await res.json();
     return data as Todo;
 }
+
+export async function updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
+    const res = await fetch(`${API_URL}/todos/${id}/`, {
+      method: "PATCH",                              // Teill-Update
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  
+    if (!res.ok) {
+      let error = await res.json();
+      let errorMessage = '';
+      if (error && typeof error === 'object') {
+        const field = Object.keys(error)[0];    //title
+        const value = error[field];             // error message in Title
+        errorMessage = value;
+
+        // Wenn es ein Array ist, nimm den ersten Text
+        // if (Array.isArray(value)) {
+        //     errorMessage = value[0];
+        // } else if (typeof value === 'string') {
+        //     errorMessage = value;
+        // }
+    }
+
+      throw new Error(`Fehler beim Aktualisieren: ${res.status}${errorMessage}`);
+    }
+  
+    const updated = await res.json();
+    return updated as Todo;
+  }
+
+  export async function deleteTodo(id: number): Promise<void> {
+    const res = await fetch(`${API_URL}/todos/${id}/`, { method: "DELETE" });
+    if (!res.ok && res.status !== 204) {
+      throw new Error(`Fehler beim Löschen: ${res.status}`);
+    }
+  }
+  
+
