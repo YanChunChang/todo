@@ -30,11 +30,14 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
         description: desc.trim() || undefined,
         status,
       };
-      if (!payload.title) return;
+      if (!payload.title) {
+        alert("Der Titel darf nicht leer sein.");
+        return;
+      }
       if (onUpdate) await onUpdate(editingId, payload);
       setEditingId(null);
     }
-    
+
     async function handleDelete(id: number) {
       if (onDelete) await onDelete(id);
     }
@@ -124,18 +127,32 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
               {!isEditing ? (
                 /* ---------- ANZEIGE-MODUS ---------- */
                 <>
-                  <div className="flex flex-col mb-2">
-                    <h3 className="truncate max-w-[80%]">Titel: {todo.title}</h3>
-                    <span className="text-xs px-2 py-1 self-start rounded-full border text-amber-50 border-amber-50 bg-yellow-500">
+                  <div className="flex flex-col mb-2 md:flex-row md:justify-between md:items-center">
+                    <h3 className="truncate max-w-[80%]">{todo.title}</h3>
+                    <span
+                    className={`text-xs px-2 py-1 self-start rounded-full border text-white border-white ${
+                        todo.status_display === 'Offen'
+                        ? "bg-linear-to-br from-pink-300 to-rosa"
+                        : todo.status_display === "In Bearbeitung"
+                        ? "bg-linear-to-br from-yellow-400 to-orange-500"
+                        : "bg-linear-to-br from-green-400 to-marine"
+                        }`}>
                       {todo.status_display}
                     </span>
                   </div>
 
                   <p>
-                    <span className="font-medium">Beschreibung:</span> <br />
+                    <span className="font-medium"></span>
                     {todo.description || "—"}
                   </p>
-                  <p>Datum: {new Date(todo.created_at).toLocaleString()}</p>
+
+                  <p className="mt-2 text-xs">
+                     Erstelldatum: {new Date(todo.created_at).toLocaleString()}
+                  </p>
+
+                  <p className="mt-2 text-xs">
+                     Zuletzt geändert: {new Date(todo.updated_at).toLocaleString()}
+                  </p>
 
                   <div className="flex mt-3 flex-col gap-2 justify-center md:flex-row">
                     <button
@@ -155,17 +172,21 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
               ) : (
                 /* ---------- EDIT-MODUS ---------- */
                 <>
-                  <div className="flex items-start justify-between gap-3">
-                    <input
-                      placeholder="Titel *"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  </div>
+                  <div className="mt-2">
+                        <label className="text-white mb-2">Titel*</label>
+                        <input
+                        className="text-dark-pink"
+                        placeholder="Titel*"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                        />
+                    </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm font-medium mb-2">Beschreibung</label>
+                    <label className="text-white mb-2">Beschreibung</label>
                     <textarea
+                      className="text-dark-pink"
                       rows={3}
                       placeholder="Beschreibung (optional)"
                       value={desc}
@@ -173,10 +194,10 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                     />
                   </div>
 
-                  <div className="mt-2">
-                    <label className="block text-sm font-medium">Status</label>
+                  <div className="mt-2 flex flex-row gap-2.5 items-center mb-3">
+                    <label className="text-white">Status</label>
                     <select
-                      className="mt-1 rounded-xl border border-white p-2"
+                      className="rounded-xl border border-white p-2 text-dark-pink"
                       value={status}
                       onChange={(e) => setStatus(e.target.value as Todo["status"])}
                     >
@@ -186,19 +207,22 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                     </select>
                   </div>
 
-                  <p className="mt-2 text-xs text-gray-600">
-                    Datum: {new Date(todo.created_at).toLocaleString()}
+                  <p className="mt-2 text-xs">
+                     Erstelldatum: {new Date(todo.created_at).toLocaleString()}
+                  </p>
+                  <p className="mt-2 text-xs">
+                     Zuletzt geändert: {new Date(todo.updated_at).toLocaleString()}
                   </p>
 
                   <div className="mt-3 flex gap-2">
                     <button
-                      className="rounded-xl bg-black text-white px-3 py-1"
+                      className="button button-in-todo-item bg-amber-50 text-purple"
                       onClick={saveEdit}
                     >
                       Speichern
                     </button>
                     <button
-                      className="rounded-xl border px-3 py-1"
+                      className="button button-in-todo-item bg-amber-50 text-purple"
                       onClick={cancelEdit}
                     >
                       Abbrechen

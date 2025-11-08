@@ -61,14 +61,13 @@
   }
 
   label {
-    @apply font-medium text-purple;
+    @apply block font-medium text-purple;
   }
 
   input,
   textarea {
     @apply px-3 py-2 rounded-lg  border-none
     outline outline-white
-    focus:outline-marine
     transition duration-300
     w-full;
   }
@@ -136,6 +135,7 @@
       background-position: 0% 50%;
     }
   }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
   }

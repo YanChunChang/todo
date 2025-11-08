@@ -37,7 +37,7 @@ export default function TodoForm({ onCreate }: Props) {
                     Titel*
                 </label>
                 <input
-                    className="animate-glow"
+                    className="animate-glow focus:outline-marine"
                     type="text"
                     id="title"
                     name="title"
@@ -54,7 +54,7 @@ export default function TodoForm({ onCreate }: Props) {
                     Beschreibung
                 </label>
                 <textarea
-                    className="animate-glow"
+                    className="animate-glow focus:outline-marine"
                     id="description"
                     name="description"
                     rows={4}
