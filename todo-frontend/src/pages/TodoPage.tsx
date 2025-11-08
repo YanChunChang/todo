@@ -15,7 +15,8 @@ export default function TodoPage() {
     try { 
       setLoading(true); 
       setError(null);
-      const data = await listTodos(); setTodos(data);
+      const data = await listTodos(); 
+      setTodos(data);
     } catch (e:any) {
        setError(e.message ?? "Fehler beim Laden");
       }
@@ -35,7 +36,14 @@ export default function TodoPage() {
   }
 
   async function handleUpdate(id: number, data: Partial<Todo>) {
-    await updateTodo(id, data);
+    try{
+      await updateTodo(id, data);
+    }
+    catch(error){
+      alert(`${error}`);
+      return;
+    }
+
     setTodos(prev => prev.map(t => t.id === id ? 
       { ...t, 
         ...data, 

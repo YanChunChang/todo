@@ -127,14 +127,14 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
               {!isEditing ? (
                 /* ---------- ANZEIGE-MODUS ---------- */
                 <>
-                  <div className="flex flex-col mb-2 md:flex-row md:justify-between md:items-center">
-                    <h3 className="truncate max-w-[80%]">{todo.title}</h3>
+                  <div className="flex mb-2 md:flex-row justify-between md:items-center">
+                    <h3 className="truncate max-w-[70%]">{todo.title}</h3>
                     <span
                     className={`text-xs px-2 py-1 self-start rounded-full border text-white border-white ${
                         todo.status_display === 'Offen'
                         ? "bg-linear-to-br from-pink-300 to-rosa"
                         : todo.status_display === "In Bearbeitung"
-                        ? "bg-linear-to-br from-yellow-400 to-orange-500"
+                        ? "bg-linear-to-br from-yellow-400 to-orange-500 truncate"
                         : "bg-linear-to-br from-green-400 to-marine"
                         }`}>
                       {todo.status_display}
