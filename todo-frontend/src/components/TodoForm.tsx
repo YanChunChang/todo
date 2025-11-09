@@ -1,9 +1,9 @@
-import type { Todo } from '../models/types';
+import type { TodoFormData } from '../models/types';
 import { useState } from 'react';
  
 
 interface Props {
-    onCreate?: (todoData: Omit<Todo, 'id'| 'status_display' | 'created_at'| 'updated_at'>) => Promise<void>| void;
+    onCreate?: (todoData: TodoFormData) => Promise<void>| void;
 }
 
 export default function TodoForm({ onCreate }: Props) {
@@ -21,7 +21,6 @@ export default function TodoForm({ onCreate }: Props) {
         onCreate?.({
             title: t,
             description: description.trim() || undefined,
-            status: 'OPEN',
         });
 
         setTitle('');

@@ -12,11 +12,11 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState<Todo["status"]>("OPEN");
   
-    function startEdit(t: Todo) {
-      setEditingId(t.id);
-      setTitle(t.title);
-      setDescription(t.description ?? "");
-      setStatus(t.status);
+    function startEdit(todo: Todo) {
+      setEditingId(todo.id);
+      setTitle(todo.title);
+      setDescription(todo.description ?? "");
+      setStatus(todo.status);
     }
 
     function cancelEdit() {
@@ -91,7 +91,8 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
 
                   <div className="flex mt-3 flex-col gap-2 justify-center md:flex-row">
                     <button
-                      className="button button-in-todo-item"
+                      className="button button-in-todo-item disabled:text-gray-200 disabled:bg-white/30"
+                      disabled={todo.status === "COMPLETED"}
                       onClick={() => startEdit(todo)}
                     >
                       Bearbeiten
