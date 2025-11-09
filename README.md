@@ -18,8 +18,8 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
   - Verantwortlich für das Laden der To-Do-Daten sowie das Weitergeben von Funktionen für Create, Update und Delete an untergeordnete Komponenten.
   - Nutzt den `TodoController` zur Steuerung der Datenflüsse und API-Operationen.
   - Rendert:
-    - `<TodoForm />` zum Erstellen und Bearbeiten
-    - `<TodoItem />` für die Anzeige einzelner Aufgaben
+    - `<TodoForm />` zum Erstellen
+    - `<TodoItem />` zum Anzeigen und Bearbeiten einzelner Aufgaben
 
 - **`TodoForm.tsx`**
   - Reusable Formular-Komponente zum Anlegen von To-Dos.
@@ -41,7 +41,7 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
 - So bleibt die TodoView entkoppelt von der Implementierung und kann leicht getestet oder erweitert werden (z. B. mit einem MockBackendService).
 
 #### Services
-- Unter /services liegt eine Service-Schicht, die direkt mit der REST-API kommuniziert.
+- Unter `/services` liegt eine Service-Schicht, die direkt mit der REST-API kommuniziert.
 - Der TodoController ruft diese Services auf und transformiert Daten zwischen API-Modellen und UI-Modellen.
 
 #### Fehlerbehandlung
