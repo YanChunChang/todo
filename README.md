@@ -62,9 +62,18 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
   - Implementiert über `TodoViewSet(viewsets.ModelViewSet)`, das alle CRUD-Operationen bereitstellt.
 - **URLs**: REST-Endpunkte nach dem Schema `/api/todos/`.
 
-## 📸 Screenshots
+## Screenshots
 ![Desktop](screenshots/Desktop.png)
 <div style="display: flex; gap: 10px;">
   <img src="screenshots/Mobile_Todolist.png" alt="Mobile ToDoList" width="45%"/>
   <img src="screenshots/Mobile_Todoform.png" alt="Mobile ToDoForm" width="45%" height="60%"/>
 </div>
+
+## Erweiterungsmöglichkeiten
+- Benutzerauthentifizierung & Login-System (mit Django Auth + JWT).
+- Filter- & Suchfunktion im Frontend und Backend
+- Statistik / Dashboard-Ansicht
+- Dark Mode & Theme-System
+- Unittests
+- Deployment
+- Erweiterte Architektur (Model Layer)
