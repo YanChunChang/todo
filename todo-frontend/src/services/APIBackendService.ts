@@ -1,64 +1,67 @@
-import type { Todo } from '../models/types';
+import type { Todo, TodoFormData } from '../models/types';
+import type { BackendServiceInterface } from './TodoBackendServiceInterface';
 
-const env = import.meta.env
-const API_URL = env.VITE_API_BASE_URL
+export class APIBackendService implements BackendServiceInterface {
+    readonly env = import.meta.env;
+    readonly API_URL = this.env.VITE_API_BASE_URL;
 
-export async function listTodos(): Promise<Todo[]> {
-    const res = await fetch(`${API_URL}/todos/`);
-    
-    await errorHandler(res);
+    async listTodos(): Promise<Todo[]> {
+        const res = await fetch(`${this.API_URL}/todos/`);
 
-    const data = await res.json();
-    return data as Todo[];
-}
+        await this.errorHandler(res);
 
-export async function createTodo(todoData: Omit<Todo, 'id' | 'status_display' | 'created_at' | 'updated_at'>): Promise<Todo> {
-    const res = await fetch(`${API_URL}/todos/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(todoData),
-    });
+        const data = await res.json();
+        return data as Todo[];
+    }
 
-    await errorHandler(res);
+    async createTodo(todoData: TodoFormData): Promise<Todo> {
+        const res = await fetch(`${this.API_URL}/todos/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(todoData),
+        });
 
-    const data = await res.json();
-    return data as Todo;
-}
+        await this.errorHandler(res);
 
-export async function updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
-    const res = await fetch(`${API_URL}/todos/${id}/`, {
-        method: "PATCH",                              // Teill-Update
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
+        const data = await res.json();
+        return data as Todo;
+    }
 
-    await errorHandler(res);
+    async updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
+        const res = await fetch(`${this.API_URL}/todos/${id}/`, {
+            method: "PATCH",                              // Teill-Update
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
 
-    const updated = await res.json();
-    return updated as Todo;
-}
+        await this.errorHandler(res);
 
-export async function deleteTodo(id: number): Promise<void> {
-    const res = await fetch(`${API_URL}/todos/${id}/`, { method: "DELETE" });
-    await errorHandler(res);
-}
+        const updated = await res.json();
+        return updated as Todo;
+    }
 
- async function errorHandler(res: Response) {
-    if (!res.ok) {
-        let errorMessage = '';
-        try {
-          const error = await res.json(); 
-          const field = Object.keys(error)[0];
-          const value = error[field];
-          errorMessage = value;
-        } catch (err) {
-          console.error('Fehler beim Lesen der Fehlermeldung:', err);
-          errorMessage = 'Unbekannter Fehler';
+    async deleteTodo(id: number): Promise<void> {
+        const res = await fetch(`${this.API_URL}/todos/${id}/`, { method: "DELETE" });
+        await this.errorHandler(res);
+    }
+
+    async errorHandler(res: Response) {
+        if (!res.ok) {
+            let errorMessage = '';
+            try {
+                const error = await res.json();
+                const field = Object.keys(error)[0];
+                const value = error[field];
+                errorMessage = value;
+            } catch (err) {
+                console.error('Fehler beim Lesen der Fehlermeldung:', err);
+                errorMessage = 'Unbekannter Fehler';
+            }
+            throw new Error(errorMessage);
         }
-        throw new Error(errorMessage);
-      }
+    }
+
+
 }
-
-
