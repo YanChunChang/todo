@@ -9,13 +9,13 @@ type Props = {
 export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [title, setTitle] = useState("");
-    const [desc, setDesc] = useState("");
+    const [description, setDescription] = useState("");
     const [status, setStatus] = useState<Todo["status"]>("OPEN");
   
     function startEdit(t: Todo) {
       setEditingId(t.id);
       setTitle(t.title);
-      setDesc(t.description ?? "");
+      setDescription(t.description ?? "");
       setStatus(t.status);
     }
 
@@ -27,7 +27,7 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
       if (!editingId) return;
       const payload: Partial<Todo> = {
         title: title.trim(),
-        description: desc.trim() || undefined,
+        description: description.trim() || undefined,
         status,
       };
       if (!payload.title) {
@@ -189,8 +189,8 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                       className="text-dark-pink"
                       rows={3}
                       placeholder="Beschreibung (optional)"
-                      value={desc}
-                      onChange={(e) => setDesc(e.target.value)}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
 

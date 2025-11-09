@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import TodoForm from '../components/TodoForm';
-import type { Todo } from '../models/types';
-import { createTodo, deleteTodo, listTodos, updateTodo } from '../services/APIBackendService';
-import TodoItem from '../components/TodoItem';
+import TodoForm from '../../components/TodoForm';
+import type { Todo, TodoFormData } from '../../models/types';
+import TodoItem from '../../components/TodoItem';
+import type { TodoControllerInterface } from './TodoControllerInterface';
 
+interface TodoViewProps {
+  controller: TodoControllerInterface;
+}
 
-export default function TodoPage() {
+export default function TodoView({ controller }: TodoViewProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +18,7 @@ export default function TodoPage() {
     try { 
       setLoading(true); 
       setError(null);
-      const data = await listTodos(); 
+      const data = await controller.getListTodos(); 
       setTodos(data);
     } catch (e:any) {
        setError(e.message ?? "Fehler beim Laden");
@@ -23,10 +26,10 @@ export default function TodoPage() {
     finally { setLoading(false); }
   }
 
-  async function handleCreate(todoData: Omit<Todo, 'id' | 'status_display' | 'created_at' | 'updated_at'>) {
+  async function handleCreate(todoData: TodoFormData) {
     let newTodo: Todo;
     try {
-      newTodo = await createTodo(todoData);
+      newTodo = await controller.createTodo(todoData);
     } catch (error) {
       alert(`${error}`);
       return;
@@ -37,24 +40,34 @@ export default function TodoPage() {
 
   async function handleUpdate(id: number, data: Partial<Todo>) {
     try{
-      await updateTodo(id, data);
+      await controller.updateTodo(id, data);
     }
     catch(error){
       alert(`${error}`);
       return;
     }
 
-    setTodos(prev => prev.map(t => t.id === id ? 
-      { ...t, 
-        ...data, 
-        updated_at: new Date().toISOString() } : t));
+    setTodos(prevTodos => prevTodos.map( todo =>
+      todo.id === id
+      ? { ...todo, ...data, updated_at: new Date().toISOString() }
+      : todo
+    ));
+
     await refresh();
   };
+
+  async function handleDelete(id: number) {
+    try{
+      await controller.deleteTodo(id);
+    }
+    catch(error){
+      alert(`${error}`);
+      return;
+    }
+    
+    setTodos(prevTodos => prevTodos.filter(t => t.id !== id));
+  }
   
-  const handleDelete = async (id: number) => {
-    await deleteTodo(id);
-    setTodos(prev => prev.filter(t => t.id !== id));
-  };
 
   useEffect(() => { refresh(); }, []);
   

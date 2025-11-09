@@ -1,11 +1,13 @@
 import './App.css'
-import TodoPage from './pages/TodoPage';
+import { TodoController } from './pages/todo/TodoController';
+import TodoView from './pages/todo/TodoView';
+import { APIBackendService } from './services/APIBackendService';
 
 
 function App() {
-  return  <TodoPage />;
+  const controller = new TodoController(new APIBackendService());
 
-
+  return  <TodoView controller={controller} />;
 }
 
 export default App

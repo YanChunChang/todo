@@ -31,7 +31,7 @@ export class APIBackendService implements BackendServiceInterface {
 
     async updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
         const res = await fetch(`${this.API_URL}/todos/${id}/`, {
-            method: "PATCH",                              // Teill-Update
+            method: "PATCH",                             
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
@@ -43,7 +43,9 @@ export class APIBackendService implements BackendServiceInterface {
     }
 
     async deleteTodo(id: number): Promise<void> {
-        const res = await fetch(`${this.API_URL}/todos/${id}/`, { method: "DELETE" });
+        const res = await fetch(`${this.API_URL}/todos/${id}/`, { 
+            method: "DELETE" 
+        });
         await this.errorHandler(res);
     }
 
