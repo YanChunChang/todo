@@ -1,5 +1,5 @@
 import type { TodoControllerInterface } from './TodoControllerInterface';
-import type { Todo, TodoFormData } from '../../models/types';
+import type { Todo, TodoFormData, TodoPatchData } from '../../models/types';
 import type { BackendServiceInterface } from '../../services/TodoBackendServiceInterface';
 
 export class TodoController implements TodoControllerInterface{
@@ -15,9 +15,8 @@ export class TodoController implements TodoControllerInterface{
     createTodo(data: TodoFormData): Promise<Todo> {
         return this.backend.createTodo(data);
     }
-    updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
+    updateTodo(id: number, data: TodoPatchData): Promise<Todo> {
         return this.backend.updateTodo(id, data);
-        
     }
     deleteTodo(id: number): Promise<void> {
         return this.backend.deleteTodo(id);

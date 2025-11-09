@@ -14,3 +14,9 @@ export interface TodoFormData {
   title: string;
   description?: string;
 }
+
+export interface TodoPatchData {
+  title: string;
+  description?: string;
+  status: Status;
+}

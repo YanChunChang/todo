@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import TodoForm from '../../components/TodoForm';
-import type { Todo, TodoFormData } from '../../models/types';
+import type { Todo, TodoFormData, TodoPatchData } from '../../models/types';
 import TodoItem from '../../components/TodoItem';
 import type { TodoControllerInterface } from './TodoControllerInterface';
 
@@ -10,20 +10,15 @@ interface TodoViewProps {
 
 export default function TodoView({ controller }: TodoViewProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Liste laden
   async function refresh() {
     try { 
-      setLoading(true); 
-      setError(null);
       const data = await controller.getListTodos(); 
       setTodos(data);
-    } catch (e:any) {
-       setError(e.message ?? "Fehler beim Laden");
-      }
-    finally { setLoading(false); }
+    } catch (error) {
+      alert(`Fehler beim Laden der Aufgaben: ${error}`);
+    }
   }
 
   async function handleCreate(todoData: TodoFormData) {
@@ -38,7 +33,7 @@ export default function TodoView({ controller }: TodoViewProps) {
     setTodos((prevTodos) => [newTodo, ...prevTodos]);
   }
 
-  async function handleUpdate(id: number, data: Partial<Todo>) {
+  async function handleUpdate(id: number, data: TodoPatchData) {
     try{
       await controller.updateTodo(id, data);
     }

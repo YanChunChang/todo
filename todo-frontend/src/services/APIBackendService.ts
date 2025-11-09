@@ -1,4 +1,4 @@
-import type { Todo, TodoFormData } from '../models/types';
+import type { Todo, TodoFormData, TodoPatchData } from '../models/types';
 import type { BackendServiceInterface } from './TodoBackendServiceInterface';
 
 export class APIBackendService implements BackendServiceInterface {
@@ -29,7 +29,7 @@ export class APIBackendService implements BackendServiceInterface {
         return data as Todo;
     }
 
-    async updateTodo(id: number, data: Partial<Todo>): Promise<Todo> {
+    async updateTodo(id: number, data: TodoPatchData): Promise<Todo> {
         const res = await fetch(`${this.API_URL}/todos/${id}/`, {
             method: "PATCH",                             
             headers: { "Content-Type": "application/json" },
