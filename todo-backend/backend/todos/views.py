@@ -14,6 +14,3 @@ def health_check(request):
 class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all().order_by('-created_at')
     serializer_class = TodoSerializer
-    #filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    #search_fields = ['title', 'description', 'status']
-    #ordering_fields = ['created_at', 'updated_at', 'status']
