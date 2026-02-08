@@ -1,6 +1,12 @@
 import pytest
+from django.urls import reverse
 from rest_framework.test import APIClient
 from todos.models import Todo
+
+LIST_URL = reverse("todo-list")
+
+def detail_url(todo_id):
+    return reverse("todo-detail", args=[todo_id])
 
 # Preparation
 @pytest.fixture
@@ -24,15 +30,16 @@ def todos():
         status="IN_PROGRESS"
     )
 
+# Tests
 @pytest.mark.django_db
 def test_get_todos_empty(api_client):
-    response = api_client.get("/api/todos/")
+    response = api_client.get(LIST_URL)
     assert response.status_code == 200
     assert response.data == []
 
 @pytest.mark.django_db
 def test_get_todos_list(api_client, todos):
-    response = api_client.get("/api/todos/")
+    response = api_client.get(LIST_URL)
     assert response.status_code == 200
     assert len(response.data) == 2
     titles = {item["title"] for item in response.data}
@@ -40,7 +47,7 @@ def test_get_todos_list(api_client, todos):
 
 @pytest.mark.django_db
 def test_get_todo_detail(api_client, todo):
-    response = api_client.get(f"/api/todos/{todo.id}/")
+    response = api_client.get(detail_url(todo.id))
 
     assert response.status_code == 200
     assert response.data["title"] == "Test Todo"
@@ -48,7 +55,7 @@ def test_get_todo_detail(api_client, todo):
 
 @pytest.mark.django_db
 def test_create_todo(api_client):
-    response = api_client.post("/api/todos/", {
+    response = api_client.post(LIST_URL, {
         "title": "New Todo",
         "status": "OPEN"
     }, format="json")
@@ -59,7 +66,7 @@ def test_create_todo(api_client):
 
 @pytest.mark.django_db
 def test_create_todo_invalid_data(api_client):
-    response = api_client.post("/api/todos/", {
+    response = api_client.post(LIST_URL, {
         "title": "",
         "status": "OPEN"
     }, format="json")
@@ -69,7 +76,7 @@ def test_create_todo_invalid_data(api_client):
 
 @pytest.mark.django_db
 def test_update_todo(api_client, todo):
-    response = api_client.put(f"/api/todos/{todo.id}/", {
+    response = api_client.put(detail_url(todo.id), {
         "title": "Updated Todo",
         "status": "IN_PROGRESS"
     }, format="json")
@@ -80,7 +87,7 @@ def test_update_todo(api_client, todo):
 
 @pytest.mark.django_db
 def test_update_todo_invalid(api_client, todo):
-    response = api_client.put(f"/api/todos/{todo.id}/", {
+    response = api_client.put(detail_url(todo.id), {
         "title": "",
         "status": "IN_PROGRESS"
     }, format="json")
@@ -90,7 +97,7 @@ def test_update_todo_invalid(api_client, todo):
 
 @pytest.mark.django_db
 def test_delete_todo(api_client, todo):
-    response = api_client.delete(f"/api/todos/{todo.id}/")
+    response = api_client.delete(detail_url(todo.id))
 
     assert response.status_code == 204
     assert Todo.objects.count() == 0
