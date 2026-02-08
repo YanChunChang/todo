@@ -3,7 +3,8 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from todos.models import Todo
 
-LIST_URL = reverse("todo-list")
+def list_url():
+    return reverse("todo-list")
 
 def detail_url(todo_id):
     return reverse("todo-detail", args=[todo_id])
@@ -22,24 +23,21 @@ def todo():
 
 @pytest.fixture
 def todos():
-    return Todo.objects.create(
-        title="Test 0",
-        status="OPEN"
-    ), Todo.objects.create(
-        title="Test 1",
-        status="IN_PROGRESS"
-    )
+    return [
+        Todo.objects.create(title="Test 0", status="OPEN"),
+        Todo.objects.create(title="Test 1", status="IN_PROGRESS"),
+    ]
 
 # Tests
 @pytest.mark.django_db
 def test_get_todos_empty(api_client):
-    response = api_client.get(LIST_URL)
+    response = api_client.get(list_url())
     assert response.status_code == 200
     assert response.data == []
 
 @pytest.mark.django_db
 def test_get_todos_list(api_client, todos):
-    response = api_client.get(LIST_URL)
+    response = api_client.get(list_url())
     assert response.status_code == 200
     assert len(response.data) == 2
     titles = {item["title"] for item in response.data}
@@ -55,7 +53,7 @@ def test_get_todo_detail(api_client, todo):
 
 @pytest.mark.django_db
 def test_create_todo(api_client):
-    response = api_client.post(LIST_URL, {
+    response = api_client.post(list_url(), {
         "title": "New Todo",
         "status": "OPEN"
     }, format="json")
@@ -66,7 +64,7 @@ def test_create_todo(api_client):
 
 @pytest.mark.django_db
 def test_create_todo_invalid_data(api_client):
-    response = api_client.post(LIST_URL, {
+    response = api_client.post(list_url(), {
         "title": "",
         "status": "OPEN"
     }, format="json")
@@ -104,6 +102,6 @@ def test_delete_todo(api_client, todo):
 
 @pytest.mark.django_db
 def test_delete_todo_not_found(api_client):
-    response = api_client.delete("/api/todos/9999/")
+    response = api_client.delete(detail_url(9999))
 
     assert response.status_code == 404
