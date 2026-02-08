@@ -57,3 +57,33 @@ def test_create_todo(api_client):
     assert response.data["title"] == "New Todo"
     assert response.data["status"] == "OPEN"
 
+@pytest.mark.django_db
+def test_create_todo_invalid_data(api_client):
+    response = api_client.post("/api/todos/", {
+        "title": "",
+        "status": "OPEN"
+    }, format="json")
+
+    assert response.status_code == 400
+    assert "title" in response.data
+
+@pytest.mark.django_db
+def test_update_todo(api_client, todo):
+    response = api_client.put(f"/api/todos/{todo.id}/", {
+        "title": "Updated Todo",
+        "status": "IN_PROGRESS"
+    }, format="json")
+
+    assert response.status_code == 200
+    assert response.data["title"] == "Updated Todo"
+    assert response.data["status"] == "IN_PROGRESS"
+
+@pytest.mark.django_db
+def test_update_todo_invalid(api_client, todo):
+    response = api_client.put(f"/api/todos/{todo.id}/", {
+        "title": "",
+        "status": "IN_PROGRESS"
+    }, format="json")
+
+    assert response.status_code == 400
+    assert "title" in response.data
