@@ -10,6 +10,7 @@ test("shows the form with title and description fields", () => {
     render(<TodoForm />);
 
     // Check if the fields are present
+    expect(screen.getByRole("heading",{name:/Aufgaben erstellen/i})).toBeInTheDocument();
     expect(screen.getByLabelText(/titel/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/beschreibung/i)).toBeInTheDocument();
     expect(screen.getByRole("button", {name:/speichern/i})).toBeInTheDocument();
