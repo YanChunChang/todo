@@ -109,8 +109,9 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                 /* ---------- EDIT-MODUS ---------- */
                 <>
                   <div className="mt-2">
-                        <label className="text-white mb-2">Titel*</label>
+                        <label className="text-white mb-2" htmlFor="title">Titel*</label>
                         <input
+                        id="title"
                         className="text-dark-pink"
                         placeholder="Titel*"
                         value={title}
@@ -120,8 +121,9 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                     </div>
 
                   <div className="mt-2">
-                    <label className="text-white mb-2">Beschreibung</label>
+                    <label className="text-white mb-2" htmlFor="description">Beschreibung</label>
                     <textarea
+                      id="description"
                       className="text-dark-pink"
                       rows={3}
                       placeholder="Beschreibung (optional)"
@@ -131,8 +133,9 @@ export default function TodoItem({ todos, onUpdate, onDelete }: Props) {
                   </div>
 
                   <div className="mt-2 flex flex-row gap-2.5 items-center mb-3">
-                    <label className="text-white">Status</label>
+                    <label className="text-white" htmlFor="status">Status</label>
                     <select
+                      id="status"
                       className="rounded-xl border border-white p-2 text-dark-pink"
                       value={status}
                       onChange={(e) => setStatus(e.target.value as Todo["status"])}
