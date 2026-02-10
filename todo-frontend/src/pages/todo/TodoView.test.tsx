@@ -91,9 +91,38 @@ test("handles create todo", async () => {
     alertSpy.mockRestore();
 });
 
-
+// todo: wo ist der fehler Unable to find an accessible element with the role "button" and name `/bearbeiten/i`
 test("handles update todo", async () => {
-    
+    const updatedData = {
+        title: "Updated Test Todo 1",
+        description: "Updated description for Test Todo 1",
+        status: "IN_PROGRESS",
+    };
+    const controller = {
+        ...mockController,
+        getListTodos: vi.fn().mockResolvedValue(mockTodos),
+        updateTodo: vi.fn().mockResolvedValue(updatedData)
+    }
+
+    render(<TodoView controller={controller} />);
+
+    const editButtons = await screen.findAllByRole("button", { name: /bearbeiten/i });
+    await userEvent.click(editButtons[0]);
+
+    await userEvent.clear(screen.getByLabelText(/titel/i));
+    await userEvent.type(screen.getByLabelText(/titel/i), updatedData.title);
+
+    await userEvent.clear(screen.getByLabelText(/beschreibung/i));
+    await userEvent.type(screen.getByLabelText(/beschreibung/i), updatedData.description);
+
+    await userEvent.selectOptions(screen.getByRole("combobox"), updatedData.status);
+    const saveButtons = await screen.findAllByRole("button", {name: /speichern/i});
+    await userEvent.click(saveButtons[0]);
+
+    await waitFor(() => {
+        expect(controller.updateTodo).toHaveBeenCalledWith(mockTodos[0].id, updatedData);
+    });
+
 });
 
 test("handles delete todo", async () => {
