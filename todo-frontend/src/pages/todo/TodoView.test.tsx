@@ -229,3 +229,27 @@ test("handles delete error", async () => {
 
     alertSpy.mockRestore();
 });
+
+//validation test
+test("prevents save when title is empty", async () => {
+    const controller = {
+        ...mockController,
+        updateTodo: vi.fn(),
+    };
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(<TodoView controller={controller} />);
+
+    const editButtons = await screen.findAllByRole("button", { name: /bearbeiten/i });
+    await userEvent.click(editButtons[0]);
+    await userEvent.clear(screen.getByLabelText(/titel/i));
+
+    const saveButtons = await screen.findAllByRole("button", {name: /speichern/i});
+    await userEvent.click(saveButtons[0]);
+    await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledWith("Der Titel darf nicht leer sein.");
+    });
+    expect(controller.updateTodo).not.toHaveBeenCalled();
+
+    alertSpy.mockRestore();
+});

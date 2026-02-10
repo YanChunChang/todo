@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, vi } from "vitest";
 import { APIBackendService } from "./APIBackendService";
-import type { Status, TodoPatchData } from "../models/types";
+import type { Status } from "../models/types";
 
 describe("APIBackendService - success", () => {
     let service: APIBackendService;
