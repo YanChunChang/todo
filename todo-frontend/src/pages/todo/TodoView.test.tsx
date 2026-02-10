@@ -100,7 +100,6 @@ test("handles update todo", async () => {
     };
     const controller = {
         ...mockController,
-        getListTodos: vi.fn().mockResolvedValue(mockTodos),
         updateTodo: vi.fn().mockResolvedValue(updatedData)
     }
 
@@ -122,13 +121,111 @@ test("handles update todo", async () => {
     await waitFor(() => {
         expect(controller.updateTodo).toHaveBeenCalledWith(mockTodos[0].id, updatedData);
     });
-
 });
 
 test("handles delete todo", async () => {
-    
+    const controller = {
+        ...mockController,
+        deleteTodo: vi.fn().mockResolvedValue(Promise<void>)
+    }
+    render(<TodoView controller={controller} />);
+    const deleteButtons = await screen.findAllByRole("button", {name: /löschen/i});
+    await userEvent.click(deleteButtons[0]);
+
+    await waitFor (() => {
+        expect(controller.deleteTodo).toHaveBeenCalledWith(mockTodos[0].id);
+    });
+
+    await waitFor(() => {
+        expect(screen.queryByText("Test Todo 1")).not.toBeInTheDocument();
+    });
 });
 
-test("handles Error", async () => {
-    
+test("handles load Error", async () => {
+    const controller = {
+        ...mockController,
+        getListTodos: vi.fn().mockRejectedValue(new Error("load failed")),
+    };
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(<TodoView controller={controller} />);
+
+    await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledWith(
+            "Fehler beim Laden der Aufgaben: Error: load failed"
+        );
+    });
+    alertSpy.mockRestore();
+});
+
+test("handles create Error", async () => {
+    const controller = {
+        ...mockController,
+        createTodo: vi.fn().mockRejectedValue(new Error("create failed")),
+    };
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(<TodoView controller={controller} />);
+    await userEvent.type(screen.getByLabelText(/Titel/i), "New Todo");
+    await userEvent.type(screen.getByLabelText(/Beschreibung/i), "New Description");
+    await userEvent.click(screen.getByRole("button", { name: /speichern/i }));
+
+    await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledWith("Error: create failed");
+    });
+    alertSpy.mockRestore();
+});
+
+test("handles update error", async () => {
+    const updatedData = {
+        title: "Updated Test Todo 1",
+        description: "Updated description for Test Todo 1",
+        status: "IN_PROGRESS",
+    };
+    const controller = {
+        ...mockController,
+        updateTodo: vi.fn().mockRejectedValue(new Error("update failed")),
+    };
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(<TodoView controller={controller} />);
+
+    const editButtons = await screen.findAllByRole("button", { name: /bearbeiten/i });
+    await userEvent.click(editButtons[0]);
+
+    await userEvent.clear(screen.getByLabelText(/titel/i));
+    await userEvent.type(screen.getByLabelText(/titel/i), updatedData.title);
+
+    await userEvent.clear(screen.getByLabelText(/beschreibung/i));
+    await userEvent.type(screen.getByLabelText(/beschreibung/i), updatedData.description);
+
+    await userEvent.selectOptions(screen.getByRole("combobox"), updatedData.status);
+    const saveButtons = await screen.findAllByRole("button", {name: /speichern/i});
+    await userEvent.click(saveButtons[0]);
+
+    await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledWith("Error: update failed");
+    });
+
+    alertSpy.mockRestore();
+});
+
+test("handles delete error", async () => {
+    const controller = {
+        ...mockController,
+        deleteTodo: vi.fn().mockRejectedValue(new Error("delete failed")),
+    };
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    render(<TodoView controller={controller} />);
+
+    const deleteButtons = await screen.findAllByRole("button", { name: /löschen/i });
+    await userEvent.click(deleteButtons[0]);
+
+    await waitFor(() => {
+        expect(alertSpy).toHaveBeenCalledWith("Error: delete failed");
+    });
+    expect(screen.getByText("Test Todo 1")).toBeInTheDocument();
+
+    alertSpy.mockRestore();
 });
