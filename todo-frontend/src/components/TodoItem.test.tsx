@@ -83,6 +83,7 @@ test("user can stop edit-mode",async() =>{
     expect(screen.queryByDisplayValue("Test description")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /speichern/i })).not.toBeInTheDocument();
     
+    // Ursprüngliche Werte sollten weiterhin angezeigt werden
     expect(screen.getByText("Test Todo")).toBeInTheDocument();
     expect(screen.getByText("Test description")).toBeInTheDocument();
     expect(screen.getByText("Offen")).toBeInTheDocument();
