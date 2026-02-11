@@ -62,6 +62,16 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
   - Implementiert über `TodoViewSet(viewsets.ModelViewSet)`, das alle CRUD-Operationen bereitstellt.
 - **URLs**: REST-Endpunkte nach dem Schema `/api/todos/`.
 
+## CI/CD
+GitHub Actions führt die Tests automatisch bei `push` und `pull_request` aus.
+- **Frontend**: 
+- laufen mit Vitest + Testing Library + JSDOM.
+- Netlify (Deploy aus `todo-frontend`)
+- **Backend**:
+- Backend-Tests laufen mit pytest + pytest-django.
+- Railway (Deploy aus `todo-backend`)
+**Live in** : https://todo-chun.netlify.app/
+
 ## Screenshots
 ![Desktop](screenshots/Desktop.png)
 <div style="display: flex; gap: 10px;">
@@ -72,8 +82,5 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
 ## Erweiterungsmöglichkeiten
 - Benutzerauthentifizierung & Login-System (mit Django Auth + JWT).
 - Filter- & Suchfunktion im Frontend und Backend
-- Statistik / Dashboard-Ansicht
 - Dark Mode & Theme-System
-- Unittests
-- Deployment
 - Erweiterte Architektur (Model Layer)
