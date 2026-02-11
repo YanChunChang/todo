@@ -63,13 +63,12 @@ Das Projekt ist in **Frontend** und **Backend** klar getrennt.
 - **URLs**: REST-Endpunkte nach dem Schema `/api/todos/`.
 
 ## CI/CD
-GitHub Actions führt die Tests automatisch bei `push` und `pull_request` aus.
-- **Frontend**: 
-- laufen mit Vitest + Testing Library + JSDOM.
-- Netlify (Deploy aus `todo-frontend`)
-- **Backend**:
-- Backend-Tests laufen mit pytest + pytest-django.
-- Railway (Deploy aus `todo-backend`)
+GitHub Actions führt die Tests automatisch aus.
+- Automatisierte Testausführung bei Push & Pull Requests
+- Frontend-Tests mit Vitest, Testing Library & JSDOM
+- Backend-Tests mit pytest & pytest-django
+- Automatisches Deployment zu Netlify (Frontend) und Railway (Backend)
+
 **Live in** : https://todo-chun.netlify.app/
 
 ## Screenshots
